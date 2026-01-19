@@ -8,38 +8,199 @@ const courses = await getCollection('courses');
 const featured = courses.filter(c => c.data.featured).slice(0,6);
 ---
 <BaseLayout title={page.data.title} description={page.data.description}>
-  <section class="mx-auto max-w-6xl px-4 pt-16 pb-10">
-    <div class="grid gap-10 lg:grid-cols-2 items-center">
+  <!-- Animated gradient background -->
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute inset-0 bg-[rgb(var(--bg))]"></div>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-[rgb(var(--brand))] to-[rgb(var(--brand2))] rounded-full opacity-20 blur-3xl animate-float"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-br from-[rgb(var(--brand2))] to-[rgb(var(--brand))] rounded-full opacity-20 blur-3xl animate-float-delayed"></div>
+  </div>
+
+  <section class="mx-auto max-w-6xl px-4 pt-24 pb-16 relative">
+    <div class="grid gap-12 lg:grid-cols-2 items-center">
       <div>
         <Reveal>
-          <h1 class="text-4xl md:text-5xl font-semibold leading-tight">
-            Certification training that feels like a <span class="text-transparent bg-clip-text bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))]">product launch</span>.
+          <!-- Animated badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[rgba(var(--brand),.1)] to-[rgba(var(--brand2),.1)] border border-[rgba(var(--brand),.2)] mb-6 animate-fade-in">
+            <span class="w-2 h-2 rounded-full bg-[rgb(var(--brand))] animate-pulse"></span>
+            <span class="text-sm font-medium">Trusted by 500+ professionals</span>
+          </div>
+
+          <h1 class="text-5xl md:text-6xl font-bold leading-tight">
+            Certification training that feels like a 
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[rgb(var(--brand))] via-[rgb(var(--brand2))] to-[rgb(var(--brand))] animate-gradient">
+              product launch
+            </span>
           </h1>
-          <p class="mt-4 text-[rgb(var(--muted))] text-lg">Fast, modern, B2B-ready programs with strong trust signals.</p>
-          <div class="mt-7 flex flex-col sm:flex-row gap-3">
-            <a href="/contact" class="rounded-2xl px-5 py-3 text-white font-semibold bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))]">Request Corporate Training</a>
-            <a href="/courses" class="rounded-2xl px-5 py-3 border border-[rgb(var(--border))] bg-[rgb(var(--panel))] hover:shadow-sm transition">Browse Courses</a>
+          
+          <p class="mt-6 text-[rgb(var(--muted))] text-xl leading-relaxed">
+            Fast, modern, B2B-ready programs with strong trust signals and hands-on labs.
+          </p>
+          
+          <div class="mt-8 flex flex-col sm:flex-row gap-4">
+            <a href="/contact" class="group relative rounded-2xl px-6 py-4 text-white font-semibold bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))] shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+              <span class="relative z-10">Request Corporate Training</span>
+              <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-[rgb(var(--brand2))] to-[rgb(var(--brand))] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </a>
+            <a href="/courses" class="rounded-2xl px-6 py-4 border-2 border-[rgb(var(--border))] bg-[rgb(var(--panel))] hover:border-[rgb(var(--brand))] hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold">
+              Browse Courses
+            </a>
+          </div>
+
+          <!-- Trust indicators -->
+          <div class="mt-10 flex flex-wrap gap-6 text-sm text-[rgb(var(--muted))]">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-[rgb(var(--brand))]" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+              </svg>
+              <span>Cisco Partner 10+ years</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-[rgb(var(--brand))]" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span>MCT Certified</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-[rgb(var(--brand))]" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+              </svg>
+              <span>B2B Ready</span>
+            </div>
           </div>
         </Reveal>
       </div>
 
       <Reveal>
-        <div class="relative rounded-[28px] border border-[rgb(var(--border))] bg-[rgba(var(--panel),.75)] backdrop-blur p-6 shadow-sm overflow-hidden">
-          <img src="/images/decor/blob.svg" alt="" class="absolute -right-24 -top-16 w-[420px] opacity-70" loading="lazy" />
-          <div class="relative">
-            <div class="text-xs text-[rgb(var(--muted))]">Popular pathways</div>
-            <div class="mt-1 font-semibold">Security · Cloud · Testing</div>
-            <div class="mt-5 grid gap-3">
-              {featured.map((c) => (
-                <a class="rounded-3xl border border-[rgb(var(--border))] bg-[rgb(var(--panel))] hover:shadow-sm transition p-4 block" href={`/courses/${c.slug}`}>
-                  <div class="text-xs text-[rgb(var(--muted))]">{c.data.vendor} · {c.data.level}</div>
-                  <div class="font-semibold">{c.data.title}</div>
+        <div class="relative">
+          <!-- Decorative gradient orb -->
+          <div class="absolute -top-10 -right-10 w-72 h-72 bg-gradient-to-br from-[rgb(var(--brand))] to-[rgb(var(--brand2))] rounded-full opacity-20 blur-3xl animate-pulse-slow"></div>
+          
+          <div class="relative rounded-[32px] border border-[rgb(var(--border))] bg-[rgba(var(--panel),.9)] backdrop-blur-xl p-8 shadow-2xl hover:shadow-[0_0_40px_rgba(var(--brand),.2)] transition-all duration-500">
+            <div class="flex items-center gap-4 pb-6 border-b border-[rgb(var(--border))]">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[rgb(var(--brand))] to-[rgb(var(--brand2))] flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                BH
+              </div>
+              <div>
+                <div class="text-xs text-[rgb(var(--muted))]">Popular pathways</div>
+                <div class="mt-1 font-semibold text-lg">Security · Cloud · Testing</div>
+              </div>
+            </div>
+            
+            <div class="mt-6 space-y-3">
+              {featured.map((c, i) => (
+                <a 
+                  class="group block rounded-3xl border border-[rgb(var(--border))] bg-gradient-to-br from-[rgb(var(--panel))] to-[rgba(var(--bg),.5)] hover:border-[rgb(var(--brand))] hover:shadow-lg hover:scale-[1.02] transition-all duration-300 p-5"
+                  href={`/courses/${c.slug}`}
+                  style={`animation-delay: ${i * 100}ms`}
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1">
+                      <div class="text-xs text-[rgb(var(--muted))] flex items-center gap-2">
+                        <span>{c.data.vendor}</span>
+                        <span>·</span>
+                        <span class="px-2 py-0.5 rounded-full bg-[rgba(var(--brand),.1)] text-[rgb(var(--brand))]">{c.data.level}</span>
+                      </div>
+                      <div class="mt-2 font-semibold group-hover:text-[rgb(var(--brand))] transition-colors">{c.data.title}</div>
+                    </div>
+                    <svg class="w-5 h-5 text-[rgb(var(--muted))] group-hover:text-[rgb(var(--brand))] group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </div>
                 </a>
               ))}
+            </div>
+
+            <div class="mt-6 p-4 rounded-2xl bg-gradient-to-r from-[rgba(var(--brand),.05)] to-[rgba(var(--brand2),.05)] border border-[rgba(var(--brand),.1)]">
+              <div class="text-sm text-[rgb(var(--muted))]">
+                💡 Tip: All programs include hands-on labs and exam readiness
+              </div>
             </div>
           </div>
         </div>
       </Reveal>
     </div>
   </section>
+
+  <!-- Animated divider -->
+  <div class="relative h-px max-w-6xl mx-auto">
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[rgb(var(--brand))] to-transparent opacity-30"></div>
+  </div>
+
+  <!-- Trust section with animated cards -->
+  <section class="mx-auto max-w-6xl px-4 py-20">
+    <Reveal>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold">Why professionals choose us</h2>
+        <p class="mt-3 text-[rgb(var(--muted))] text-lg">Practical, job-ready skills with exam success</p>
+      </div>
+    </Reveal>
+
+    <div class="grid gap-6 md:grid-cols-3">
+      {[
+        { icon: '🎯', title: 'Practical Skills First', desc: 'Learn what you'll actually use at work, then map it to exam objectives' },
+        { icon: '🔬', title: 'Labs + Practice', desc: 'Hands-on exercises and realistic scenarios to build real confidence' },
+        { icon: '📊', title: 'Exam Strategy', desc: 'Timed practice sets, review sessions, and a clear revision plan' }
+      ].map((item, i) => (
+        <Reveal style={`animation-delay: ${i * 150}ms`}>
+          <div class="group relative rounded-3xl border border-[rgb(var(--border))] bg-gradient-to-br from-[rgb(var(--panel))] to-[rgba(var(--bg),.5)] p-8 hover:border-[rgb(var(--brand))] hover:shadow-xl hover:scale-105 transition-all duration-300">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-[rgba(var(--brand),.05)] to-[rgba(var(--brand2),.05)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative">
+              <div class="text-4xl mb-4">{item.icon}</div>
+              <div class="text-xl font-semibold mb-3">{item.title}</div>
+              <p class="text-[rgb(var(--muted))] leading-relaxed">{item.desc}</p>
+            </div>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -30px) scale(1.1); }
+  }
+
+  @keyframes float-delayed {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-30px, 30px) scale(1.1); }
+  }
+
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-float {
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float-delayed 25s ease-in-out infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 4s ease-in-out infinite;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+  }
+</style>
