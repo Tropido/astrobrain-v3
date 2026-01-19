@@ -1,0 +1,27 @@
+<button id="themeToggle" class="inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-sm border border-[rgb(var(--border))] bg-[rgb(var(--panel))] hover:shadow-sm transition" aria-label="Toggle theme">
+  <span id="themeIcon" aria-hidden="true">☀️</span>
+  <span class="hidden sm:inline" id="themeLabel">Light</span>
+</button>
+
+<script is:inline>
+  const root = document.documentElement;
+  const key = 'bh_theme';
+  function apply(theme){
+    if(theme === 'dark') root.setAttribute('data-theme','dark');
+    else root.removeAttribute('data-theme');
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    if(icon) icon.textContent = isDark ? '🌙' : '☀️';
+    if(label) label.textContent = isDark ? 'Dark' : 'Light';
+  }
+  const stored = localStorage.getItem(key);
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  apply(stored || (prefersDark ? 'dark' : 'light'));
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    localStorage.setItem(key, next);
+    apply(next);
+  });
+</script>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Reveal from '../components/Reveal.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const page = await getEntry('pages','home');
+const courses = await getCollection('courses');
+const featured = courses.filter(c => c.data.featured).slice(0,6);
+---
+<BaseLayout title={page.data.title} description={page.data.description}>
+  <section class="mx-auto max-w-6xl px-4 pt-16 pb-10">
+    <div class="grid gap-10 lg:grid-cols-2 items-center">
+      <div>
+        <Reveal>
+          <h1 class="text-4xl md:text-5xl font-semibold leading-tight">
+            Certification training that feels like a <span class="text-transparent bg-clip-text bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))]">product launch</span>.
+          </h1>
+          <p class="mt-4 text-[rgb(var(--muted))] text-lg">Fast, modern, B2B-ready programs with strong trust signals.</p>
+          <div class="mt-7 flex flex-col sm:flex-row gap-3">
+            <a href="/contact" class="rounded-2xl px-5 py-3 text-white font-semibold bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))]">Request Corporate Training</a>
+            <a href="/courses" class="rounded-2xl px-5 py-3 border border-[rgb(var(--border))] bg-[rgb(var(--panel))] hover:shadow-sm transition">Browse Courses</a>
+          </div>
+        </Reveal>
+      </div>
+
+      <Reveal>
+        <div class="relative rounded-[28px] border border-[rgb(var(--border))] bg-[rgba(var(--panel),.75)] backdrop-blur p-6 shadow-sm overflow-hidden">
+          <img src="/images/decor/blob.svg" alt="" class="absolute -right-24 -top-16 w-[420px] opacity-70" loading="lazy" />
+          <div class="relative">
+            <div class="text-xs text-[rgb(var(--muted))]">Popular pathways</div>
+            <div class="mt-1 font-semibold">Security · Cloud · Testing</div>
+            <div class="mt-5 grid gap-3">
+              {featured.map((c) => (
+                <a class="rounded-3xl border border-[rgb(var(--border))] bg-[rgb(var(--panel))] hover:shadow-sm transition p-4 block" href={`/courses/${c.slug}`}>
+                  <div class="text-xs text-[rgb(var(--muted))]">{c.data.vendor} · {c.data.level}</div>
+                  <div class="font-semibold">{c.data.title}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+</BaseLayout>

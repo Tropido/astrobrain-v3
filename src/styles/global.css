@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root{
+  --bg: 248 250 252;
+  --panel: 255 255 255;
+  --text: 15 23 42;
+  --muted: 71 85 105;
+  --border: 226 232 240;
+  --brand: 37 99 235;
+  --brand2: 124 58 237;
+  --ring: 59 130 246;
+}
+
+:root[data-theme="dark"]{
+  --bg: 10 12 18;
+  --panel: 16 19 29;
+  --text: 226 232 240;
+  --muted: 148 163 184;
+  --border: 51 65 85;
+  --brand: 56 189 248;
+  --brand2: 167 139 250;
+  --ring: 56 189 248;
+}
+
+html{ scroll-behavior:smooth; }
+body{ background: rgb(var(--bg)); color: rgb(var(--text)); }
+
+.bg-noise{
+  background-image:
+    radial-gradient(900px circle at 10% 0%, rgba(var(--brand), .12), transparent 55%),
+    radial-gradient(900px circle at 90% 10%, rgba(var(--brand2), .10), transparent 55%),
+    radial-gradient(900px circle at 50% 110%, rgba(var(--brand), .08), transparent 50%);
+}
+
+.reveal{opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
+.reveal.is-visible{opacity:1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{transition:none; transform:none; opacity:1;}
+}
+
+:focus-visible{ outline: none; box-shadow: 0 0 0 4px rgba(var(--ring), .25); border-radius: 14px; }
+
+/* Mega menu helpers */
+
+/* Mega menu: stable hover + accessibility friendly */
+.mega {
+  transform-origin: top;
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+}
+
+/* Open when hovering/focusing the parent group */
+.group:hover .mega,
+.group:focus-within .mega {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+/* Hover bridge to prevent “gap close” */
+.group:hover .mega::before,
+.group:focus-within .mega::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12px;     /* bridge height */
+  height: 12px;   /* bridge height */
+}
+

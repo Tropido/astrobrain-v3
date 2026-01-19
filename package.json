@@ -1,0 +1,26 @@
+{
+  "name": "brainhigher-astro-bright-v3",
+  "type": "module",
+  "version": "3.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@astrojs/sitemap": "^3.0.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-astro": "^0.14.0"
+  }
+}

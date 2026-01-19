@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Reveal from '../components/Reveal.astro';
+import { getEntry } from 'astro:content';
+
+const page = await getEntry('pages','contact');
+const webhook = import.meta.env.PUBLIC_CONTACT_WEBHOOK;
+---
+<BaseLayout title="Contact | Brain Higher School" description={page.data.description}>
+  <section class="mx-auto max-w-6xl px-4 pt-14 pb-10">
+    <Reveal>
+      <h1 class="text-4xl font-semibold">Contact</h1>
+      <p class="mt-3 text-[rgb(var(--muted))]">Request a quote or ask about the right certification path.</p>
+    </Reveal>
+
+    <div class="mt-10 grid gap-8 lg:grid-cols-2">
+      <Reveal class="rounded-3xl border border-[rgb(var(--border))] bg-[rgb(var(--panel))] p-8">
+        <h2 class="text-xl font-semibold">Request a quote</h2>
+        <form id="leadForm" class="mt-6 grid gap-4">
+          <input name="name" required placeholder="Full name" class="rounded-2xl border border-[rgb(var(--border))] bg-[rgba(var(--bg),.65)] px-3 py-2" />
+          <input type="email" name="email" required placeholder="Email" class="rounded-2xl border border-[rgb(var(--border))] bg-[rgba(var(--bg),.65)] px-3 py-2" />
+          <select name="type" class="rounded-2xl border border-[rgb(var(--border))] bg-[rgba(var(--bg),.65)] px-3 py-2">
+            <option>Corporate (B2B)</option>
+            <option>Individual</option>
+            <option>Partnership</option>
+          </select>
+          <input name="certs" placeholder="Target certification(s)" class="rounded-2xl border border-[rgb(var(--border))] bg-[rgba(var(--bg),.65)] px-3 py-2" />
+          <textarea name="message" rows="5" placeholder="Message" class="rounded-2xl border border-[rgb(var(--border))] bg-[rgba(var(--bg),.65)] px-3 py-2"></textarea>
+          <button class="rounded-2xl px-5 py-3 text-white font-semibold bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))]">Send</button>
+          <p id="status" class="text-sm text-[rgb(var(--muted))]"></p>
+        </form>
+
+        <script is:inline>
+          const webhook = ${json.dumps(webhook or '')};
+          const form = document.getElementById('leadForm');
+          const status = document.getElementById('status');
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            status.textContent = 'Sending…';
+            const fd = new FormData(form);
+            const payload = Object.fromEntries(fd.entries());
+            try {
+              if (webhook) {
+                const res = await fetch(webhook, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!res.ok) throw new Error('Webhook failed');
+                status.textContent = 'Sent! We will contact you shortly.';
+                form.reset();
+              } else {
+                const subject = encodeURIComponent('Training request');
+                const body = encodeURIComponent(JSON.stringify(payload, null, 2));
+                window.location.href = `mailto:contact@brainhigherschool.com?subject=${subject}&body=${body}`;
+                status.textContent = 'Opening email…';
+              }
+            } catch {
+              status.textContent = 'Could not send automatically. Please email contact@brainhigherschool.com.';
+            }
+          });
+        </script>
+      </Reveal>
+
+      <Reveal class="rounded-3xl border border-[rgb(var(--border))] bg-[rgb(var(--panel))] p-8">
+        <h2 class="text-xl font-semibold">Email</h2>
+        <p class="mt-3 text-[rgb(var(--muted))]">contact@brainhigherschool.com</p>
+        <div class="mt-6 rounded-3xl border border-[rgb(var(--border))] bg-[rgba(var(--bg),.6)] p-5">
+          <div class="font-semibold">B2B services</div>
+          <ul class="mt-2 space-y-2 text-sm text-[rgb(var(--muted))]">
+            <li>• Role-based learning paths</li>
+            <li>• Custom schedules</li>
+            <li>• Progress checkpoints & reporting</li>
+          </ul>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+</BaseLayout>

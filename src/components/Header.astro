@@ -1,0 +1,151 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { getCollection } from 'astro:content';
+
+const courses = await getCollection('courses');
+const vendors = ['Microsoft', 'AWS', 'ISTQB'];
+const byVendor = Object.fromEntries(vendors.map(v => [v, []]));
+for (const c of courses) {
+  const v = c.data.vendor || 'Other';
+  if (byVendor[v]) byVendor[v].push({ title: c.data.shortTitle || c.data.title, slug: c.slug, level: c.data.level || '' });
+}
+for (const v of vendors) {
+  byVendor[v].sort((a,b) => a.title.localeCompare(b.title));
+}
+
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+<header class="sticky top-0 z-50 border-b border-[rgb(var(--border))] bg-[rgba(var(--bg),.75)] backdrop-blur">
+  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-3">
+    <a href="/" class="flex items-center gap-3">
+      <span class="h-10 w-10 rounded-2xl bg-gradient-to-br from-[rgb(var(--brand))] to-[rgb(var(--brand2))] grid place-items-center shadow-md">
+        <span class="font-black text-[rgb(var(--bg))]">BH</span>
+      </span>
+      <div class="leading-tight">
+        <div class="font-semibold">Brain Higher School</div>
+        <div class="text-xs text-[rgb(var(--muted))]">IT Certification Training · B2B & Individuals</div>
+      </div>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6 text-sm">
+      {nav.map((item) => (
+        <a class="text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition" href={item.href}>{item.label}</a>
+      ))}
+
+      <div class="relative group">
+        <a class="text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition inline-flex items-center gap-1" href="/courses">
+          Courses
+          <span class="text-xs">▾</span>
+        </a>
+
+        <div class="mega absolute left-1/2 -translate-x-1/2 top-full pt-3 w-[860px] max-w-[90vw]">
+          <div class="rounded-3xl border border-[rgb(var(--border))] bg-[rgb(var(--panel))] shadow-lg p-5">
+            <div class="grid grid-cols-12 gap-6">
+              <div class="col-span-4">
+                <div class="text-xs text-[rgb(var(--muted))]">Vendors</div>
+                <div class="mt-2 grid gap-2">
+                  {vendors.map((v) => (
+                    <a class="rounded-2xl border border-[rgb(var(--border))] bg-[rgba(var(--bg),.6)] hover:shadow-sm transition p-3 flex items-center justify-between" href={`/courses?vendor=${encodeURIComponent(v)}`} data-vendor={v}>
+                      <div class="flex items-center gap-3">
+                        <img src={`/images/vendors/${v.toLowerCase()}.svg`} alt={v} class="h-8 w-auto" loading="lazy" />
+                        <div>
+                          <div class="font-semibold">{v}</div>
+                          <div class="text-xs text-[rgb(var(--muted))]">View certifications</div>
+                        </div>
+                      </div>
+                      <span class="text-[rgb(var(--muted))]">→</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div class="col-span-8" id="vendorPanel">
+                <div class="text-xs text-[rgb(var(--muted))]">Certifications</div>
+                <div class="mt-2 rounded-3xl border border-[rgb(var(--border))] bg-[rgba(var(--bg),.6)] p-4">
+                  <div class="grid grid-cols-2 gap-3" id="certList">
+                    {byVendor['Microsoft'].slice(0, 10).map((c) => (
+                      <a class="rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--panel))] hover:shadow-sm transition p-3" href={`/courses/${c.slug}`}>
+                        <div class="text-xs text-[rgb(var(--muted))]">{c.level}</div>
+                        <div class="font-semibold leading-snug">{c.title}</div>
+                      </a>
+                    ))}
+                  </div>
+                  <div class="mt-3 text-xs text-[rgb(var(--muted))]">Tip: click a certification to open its landing page.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5 flex items-center justify-between rounded-3xl border border-[rgb(var(--border))] bg-gradient-to-r from-[rgba(var(--brand),.10)] to-[rgba(var(--brand2),.10)] p-4">
+              <div>
+                <div class="font-semibold">Need corporate training?</div>
+                <div class="text-xs text-[rgb(var(--muted))]">Custom schedule · team reporting · role-based pathways</div>
+              </div>
+              <a href="/contact" class="rounded-2xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))]">Request a quote</a>
+            </div>
+          </div>
+        </div>
+
+        <script is:inline>
+          const byVendor = {
+            Microsoft: ${json.dumps(byVendor['Microsoft'])},
+            AWS: ${json.dumps(byVendor['AWS'])},
+            ISTQB: ${json.dumps(byVendor['ISTQB'])}
+          };
+          const vendorCards = document.querySelectorAll('[data-vendor]');
+          const certList = document.getElementById('certList');
+
+          function render(v){
+            if(!certList) return;
+            const items = (byVendor[v] || []).slice(0, 12);
+            certList.innerHTML = items.map(c => {
+              const lvl = c.level ? `<div class="text-xs" style="color: rgb(var(--muted))">${c.level}</div>` : '';
+              return `<a class="rounded-2xl border" style="border-color: rgb(var(--border)); background: rgb(var(--panel)); padding: .75rem; display:block" href="/courses/${c.slug}">${lvl}<div style="font-weight:600; line-height:1.25">${c.title}</div></a>`;
+            }).join('');
+          }
+
+          vendorCards.forEach(el => {
+            el.addEventListener('mouseenter', () => render(el.dataset.vendor));
+            el.addEventListener('focus', () => render(el.dataset.vendor));
+          });
+        </script>
+      </div>
+
+      <a class="inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))] shadow-sm" href="/contact">
+        Request a Quote
+      </a>
+      <ThemeToggle />
+    </nav>
+
+    <div class="md:hidden flex items-center gap-2">
+      <ThemeToggle />
+      <button class="inline-flex items-center justify-center rounded-2xl px-3 py-2 border border-[rgb(var(--border))] bg-[rgb(var(--panel))]" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+
+  <div class="md:hidden hidden border-t border-[rgb(var(--border))]" id="mobileMenu">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex flex-col gap-3">
+      <a class="text-[rgb(var(--muted))] hover:text-[rgb(var(--text))]" href="/">Home</a>
+      <a class="text-[rgb(var(--muted))] hover:text-[rgb(var(--text))]" href="/about">About</a>
+      <details class="rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--panel))] p-3">
+        <summary class="cursor-pointer font-semibold">Courses</summary>
+        <div class="mt-3 grid gap-2">
+          {vendors.map((v) => (
+            <a class="text-sm text-[rgb(var(--muted))] hover:text-[rgb(var(--text))]" href={`/courses?vendor=${encodeURIComponent(v)}`}>{v}</a>
+          ))}
+        </div>
+      </details>
+      <a class="text-[rgb(var(--muted))] hover:text-[rgb(var(--text))]" href="/contact">Contact</a>
+      <a class="mt-1 inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand2))]" href="/contact">Request a Quote</a>
+    </div>
+  </div>
+
+  <script is:inline>
+    const btn = document.getElementById('menuBtn');
+    const menu = document.getElementById('mobileMenu');
+    btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+  </script>
+</header>

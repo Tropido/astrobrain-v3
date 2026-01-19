@@ -1,0 +1,23 @@
+---
+import '../styles/global.css';
+import SiteHead from '../components/SiteHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import RevealInit from '../components/RevealInit.astro';
+
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <SiteHead title={title} description={description} />
+  </head>
+  <body class="min-h-screen">
+    <Header />
+    <main class="bg-noise">
+      <slot />
+    </main>
+    <Footer />
+    <RevealInit />
+  </body>
+</html>
