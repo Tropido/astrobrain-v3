@@ -45,7 +45,28 @@ const featured = courses.filter(c => c.data.featured).slice(0,6);
               Browse Courses
             </a>
           </div>
-
+<div class="mt-6 space-y-3">
+  {featured.map((c, i) => (
+    <a class="group block rounded-3xl border border-[rgb(var(--border))] bg-gradient-to-br from-[rgb(var(--panel))] to-[rgba(var(--bg),.5)] hover:border-[rgb(var(--brand))] hover:shadow-lg hover:scale-[1.02] transition-all duration-300 p-5"
+      href={`/courses/${c.slug}`}
+      style={`animation-delay: ${i * 100}ms;`}
+    >
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex-1">
+          <div class="text-xs text-[rgb(var(--muted))] flex items-center gap-2">
+            <span>{c.data.vendor}</span>
+            <span>·</span>
+            <span class="px-2 py-0.5 rounded-full bg-[rgba(var(--brand),.1)] text-[rgb(var(--brand))]">{c.data.level}</span>
+          </div>
+          <div class="mt-2 font-semibold group-hover:text-[rgb(var(--brand))] transition-colors">{c.data.title}</div>
+        </div>
+        <svg class="w-5 h-5 text-[rgb(var(--muted))] group-hover:text-[rgb(var(--brand))] group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </a>
+  ))}
+</div>
           <!-- Trust indicators -->
           <div class="mt-10 flex flex-wrap gap-6 text-sm text-[rgb(var(--muted))]">
             <div class="flex items-center gap-2">
@@ -157,50 +178,22 @@ const featured = courses.filter(c => c.data.featured).slice(0,6);
   </section>
 </BaseLayout>
 
-<style>
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(30px, -30px) scale(1.1); }
-  }
-
-  @keyframes float-delayed {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-30px, 30px) scale(1.1); }
-  }
-
-  @keyframes gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  @keyframes pulse-slow {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 0.3; }
-  }
-
-  @keyframes fade-in {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .animate-float {
-    animation: float 20s ease-in-out infinite;
-  }
-
-  .animate-float-delayed {
-    animation: float-delayed 25s ease-in-out infinite;
-  }
-
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
-  }
-
-  .animate-pulse-slow {
-    animation: pulse-slow 4s ease-in-out infinite;
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.6s ease-out;
-  }
+<div class="grid gap-6 md:grid-cols-3">
+  {[
+    { icon: '🎯', title: 'Practical Skills First', desc: 'Learn what you'll actually use at work, then map it to exam objectives' },
+    { icon: '🔬', title: 'Labs + Practice', desc: 'Hands-on exercises and realistic scenarios to build real confidence' },
+    { icon: '📊', title: 'Exam Strategy', desc: 'Timed practice sets, review sessions, and a clear revision plan' }
+  ].map((item, i) => (
+    <Reveal style={`animation-delay: ${i * 150}ms;`}>
+      <div class="group relative rounded-3xl border border-[rgb(var(--border))] bg-gradient-to-br from-[rgb(var(--panel))] to-[rgba(var(--bg),.5)] p-8 hover:border-[rgb(var(--brand))] hover:shadow-xl hover:scale-105 transition-all duration-300">
+        <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-[rgba(var(--brand),.05)] to-[rgba(var(--brand2),.05)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="relative">
+          <div class="text-4xl mb-4">{item.icon}</div>
+          <div class="text-xl font-semibold mb-3">{item.title}</div>
+          <p class="text-[rgb(var(--muted))] leading-relaxed">{item.desc}</p>
+        </div>
+      </div>
+    </Reveal>
+  ))}
+</div>
 </style>
